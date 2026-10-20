@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jelajah Teks Prosedur: Belajar, Bermain, dan Berkarya!</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Canvas Confetti for Reward Animations -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      user-select: none;
+      -webkit-user-select: none;
+      touch-action: manipulation;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 8px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    .touch-btn {
+      transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .touch-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Pulse animation for interactive cues */
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(14, 165, 233, 0); }
+    }
+
+    .card-flip-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .card-flip.flipped .card-flip-inner {
+      transform: rotateY(180deg);
+    }
+    .card-front, .card-back {
+      backface-visibility: hidden;
+    }
+    .card-back {
+      transform: rotateY(180deg);
+    }
+  </style>
+</head>
+<body class="bg-amber-50/60 text-slate-800 h-screen flex flex-col overflow-hidden">
+
+  <!-- Top Navigation Bar -->
+  <header class="bg-gradient-to-r from-sky-600 via-teal-500 to-emerald-500 text-white px-6 py-3 shadow-lg flex justify-between items-center z-20">
+    <div class="flex items-center gap-3">
+      <div class="bg-white/20 p-2 rounded-2xl backdrop-blur-md">
+        <i class="fa-solid fa-book-open-reader text-2xl text-yellow-300"></i>
+      </div>
+      <div>
+        <h1 class="text-xl md:text-2xl font-extrabold tracking-wide drop-shadow-sm">Jelajah Teks Prosedur</h1>
+        <p class="text-xs md:text-sm text-sky-100 font-medium">Bahasa Indonesia Kelas VII SMP • Kurikulum Merdeka</p>
+      </div>
+    </div>
+
+    <!-- Right Controls / Audio & Instructions -->
+    <div class="flex items-center gap-3">
+      <button onclick="toggleHelpModal()" class="touch-btn bg-amber-400 hover:bg-amber-300 text-amber-950 font-bold px-4 py-2.5 rounded-2xl shadow-md flex items-center gap-2 text-base">
+        <i class="fa-solid fa-circle-question text-lg"></i>
+        <span>Petunjuk</span>
+      </button>
+      <button onclick="resetAllProgress()" class="touch-btn bg-rose-500 hover:bg-rose-600 text-white font-bold px-4 py-2.5 rounded-2xl shadow-md flex items-center gap-2 text-base">
+        <i class="fa-solid fa-rotate-left"></i>
+        <span class="hidden md:inline">Reset</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Content Area -->
+  <main class="flex-1 overflow-y-auto p-4 md:p-6 relative flex justify-center items-center">
+    
+    <!-- PAGE 1: BERANDA -->
+    <div id="page-1" class="page-content w-full max-w-6xl bg-white rounded-3xl p-6 md:p-10 shadow-xl border-4 border-sky-200 flex flex-col items-center justify-center text-center space-y-6">
+      <div class="inline-block bg-sky-100 text-sky-800 font-bold px-4 py-1.5 rounded-full text-sm tracking-wide border border-sky-300">
+        📍 Durasi Pembelajaran: 2 JP (80 Menit)
+      </div>
+
+      <div class="relative w-48 h-48 md:w-64 md:h-64 flex items-center justify-center">
+        <!-- SVG Character Illustration -->
+        <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
+          <circle cx="100" cy="100" r="90" fill="#E0F2FE"/>
+          <!-- Character Body -->
+          <path d="M 60,170 Q 100,120 140,170 Z" fill="#0284C7"/>
+          <circle cx="100" cy="90" r="40" fill="#FDBA74"/>
+          <!-- Hair -->
+          <path d="M 60,85 Q 100,40 140,85 Q 100,60 60,85" fill="#1E293B"/>
+          <!-- Glasses -->
+          <circle cx="85" cy="88" r="12" fill="none" stroke="#0F172A" stroke-width="3"/>
+          <circle cx="115" cy="88" r="12" fill="none" stroke="#0F172A" stroke-width="3"/>
+          <line x1="97" y1="88" x2="103" y2="88" stroke="#0F172A" stroke-width="3"/>
+          <!-- Smile -->
+          <path d="M 88,110 Q 100,125 112,110" fill="none" stroke="#0F172A" stroke-width="3" stroke-linecap="round"/>
+          <!-- Chef Hat / Decorative Icon -->
+          <path d="M 80,55 C 70,40 90,30 100,40 C 110,30 130,40 120,55 Z" fill="#FACC15"/>
+        </svg>
+      </div>
+
+      <div>
+        <h2 class="text-3xl md:text-5xl font-extrabold text-sky-900 leading-tight">
+          "Jelajah Teks Prosedur:<br><span class="text-amber-500">Belajar, Bermain, dan Berkarya!</span>"
+        </h2>
+        <p class="mt-3 text-lg md:text-xl text-slate-600 max-w-2xl mx-auto">
+          Media Pembelajaran Interaktif Papan Digital Layar Sentuh untuk Siswa SMP Kelas VII.
+        </p>
+      </div>
+
+      <div class="pt-4 flex flex-wrap gap-4 justify-center">
+        <button onclick="goToPage(2)" class="touch-btn pulse-glow bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold text-xl px-10 py-5 rounded-2xl shadow-lg border-b-4 border-emerald-700 flex items-center gap-3">
+          <i class="fa-solid fa-rocket text-2xl"></i>
+          <span>Mulai Belajar Now!</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- PAGE 2: APERSEPSI -->
+    <div id="page-2" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-teal-200 space-y-6">
+      <div class="border-b-2 border-teal-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-teal-800 flex items-center gap-3">
+          <span class="bg-teal-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-lg">1</span>
+          Apersepsi: Pengalaman Sehari-hari
+        </h2>
+        <span class="text-sm font-semibold text-teal-600 bg-teal-50 px-3 py-1 rounded-full">Refleksi Awal</span>
+      </div>
+
+      <p class="text-lg text-slate-700">Amati beberapa kegiatan sehari-hari di bawah ini yang membutuhkan petunjuk:</p>
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-4 text-center hover:shadow-md transition">
+          <div class="text-4xl mb-2">🍵</div>
+          <p class="font-bold text-amber-900 text-sm md:text-base">Membuat Teh Manis</p>
+        </div>
+        <div class="bg-blue-50 border-2 border-blue-200 rounded-2xl p-4 text-center hover:shadow-md transition">
+          <div class="text-4xl mb-2">🧼</div>
+          <p class="font-bold text-blue-900 text-sm md:text-base">Mencuci Tangan 6 Langkah</p>
+        </div>
+        <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-4 text-center hover:shadow-md transition">
+          <div class="text-4xl mb-2">🪴</div>
+          <p class="font-bold text-emerald-900 text-sm md:text-base">Menanam Bibit Pot</p>
+        </div>
+        <div class="bg-purple-50 border-2 border-purple-200 rounded-2xl p-4 text-center hover:shadow-md transition">
+          <div class="text-4xl mb-2">🔌</div>
+          <p class="font-bold text-purple-900 text-sm md:text-base">Menggunakan Alat Listrik</p>
+        </div>
+      </div>
+
+      <div class="bg-sky-50 border-2 border-sky-200 rounded-2xl p-6 space-y-4">
+        <h3 class="font-bold text-sky-900 text-lg flex items-center gap-2">
+          <i class="fa-solid fa-comments text-amber-500"></i> Pertanyaan Pemantik untuk Diskusi Kelas:
+        </h3>
+        <ul class="list-disc list-inside space-y-2 text-slate-700 text-base md:text-lg">
+          <li>Pernahkah kalian mengikuti instruksi atau panduan tertulis saat melakukan kegiatan di atas?</li>
+          <li>Mengapa langkah-langkah harus dilakukan secara berurutan dan teratur?</li>
+          <li>Apa yang terjadi jika urutan langkahnya ada yang tertukar atau tidak tepat?</li>
+        </ul>
+      </div>
+
+      <div class="flex justify-center pt-2">
+        <button onclick="toggleDiscussionAnswer()" class="touch-btn bg-teal-600 text-white font-bold px-6 py-3.5 rounded-2xl shadow-md hover:bg-teal-700 flex items-center gap-2 text-base">
+          <i class="fa-solid fa-lightbulb text-yellow-300"></i>
+          <span>Tampilkan Pembahasan Singkat</span>
+        </button>
+      </div>
+
+      <div id="apersepsi-discussion" class="hidden bg-emerald-100 border-2 border-emerald-400 text-emerald-900 p-4 rounded-2xl text-base animate-fade-in">
+        <strong>💡 Pembahasan:</strong> Jika urutan tidak tepat, hasil kegiatan bisa gagal atau membahayakan! Misal: Menyeduh teh sebelum air dipanaskan, atau memakai sabun setelah mencuci tangan. Itulah mengapa kita membutuhkan <strong>Teks Prosedur</strong> yang runtut dan logis.
+      </div>
+    </div>
+
+    <!-- PAGE 3: PENGERTIAN DAN TUJUAN -->
+    <div id="page-3" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-sky-200 space-y-6">
+      <div class="border-b-2 border-sky-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-sky-900 flex items-center gap-3">
+          <span class="bg-sky-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-lg">2</span>
+          Pengertian & Tujuan Teks Prosedur
+        </h2>
+        <span class="text-sm font-semibold text-sky-600 bg-sky-50 px-3 py-1 rounded-full">Konsep Dasar</span>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Card 1 -->
+        <div class="bg-gradient-to-br from-sky-50 to-indigo-50 border-3 border-sky-300 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="bg-sky-500 text-white w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow">
+              <i class="fa-solid fa-book"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-sky-950 mb-3">Apa itu Teks Prosedur?</h3>
+            <p class="text-slate-700 text-lg leading-relaxed">
+              Teks prosedur adalah teks yang berisi <strong>tujuan dan langkah-langkah</strong> sistematis yang harus diikuti agar pembaca dapat melakukan, menggunakan, atau membuat sesuatu dengan tepat.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-sky-200 text-sm font-bold text-sky-700">
+            📌 Kunci Utama: Sistematis & Runtut
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="bg-gradient-to-br from-amber-50 to-orange-50 border-3 border-amber-300 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+          <div>
+            <div class="bg-amber-500 text-white w-12 h-12 rounded-2xl flex items-center justify-center text-2xl mb-4 shadow">
+              <i class="fa-solid fa-bullseye"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-amber-950 mb-3">Apa Tujuannya?</h3>
+            <p class="text-slate-700 text-lg leading-relaxed">
+              Tujuan teks prosedur adalah memberikan <strong>petunjuk panduan</strong> yang jelas kepada pembaca agar mencapai hasil akhir secara maksimal, efisien, dan menghindari kesalahan.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-amber-200 text-sm font-bold text-amber-700">
+            🎯 Target: Pembaca Berhasil Mengikuti Instruksi
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-slate-100 p-4 rounded-2xl flex items-center gap-4">
+        <i class="fa-solid fa-hand-pointer text-sky-600 text-3xl"></i>
+        <p class="text-sm md:text-base text-slate-700 font-semibold">
+          Sentuh tombol navigasi di bawah untuk melanjutkan ke materi ciri-ciri teks prosedur.
+        </p>
+      </div>
+    </div>
+
+    <!-- PAGE 4: CIRI-CIRI TEKS PROSEDUR -->
+    <div id="page-4" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200 space-y-6">
+      <div class="border-b-2 border-indigo-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-indigo-900 flex items-center gap-3">
+          <span class="bg-indigo-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-lg">3</span>
+          Ciri-Ciri Teks Prosedur
+        </h2>
+        <span class="text-sm font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Sentuh Kartu Untuk Membuka</span>
+      </div>
+
+      <!-- 6 Interactive Flip Cards -->
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <!-- Feature 1 -->
+        <div class="card-flip h-40 cursor-pointer" onclick="flipCard(this)">
+          <div class="card-flip-inner w-full h-full relative">
+            <div class="card-front absolute inset-0 bg-sky-100 border-2 border-sky-300 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
+              <i class="fa-solid fa-list-ol text-3xl text-sky-600 mb-2"></i>
+              <h4 class="font-bold text-sky-900 text-lg">Langkah Runtut</h4>
+              <p class="text-xs text-sky-700 mt-1">Sentuh untuk penjelasan</p>
+            </div>
+            <div class="card-back absolute inset-0 bg-sky-600 text-white rounded-2xl p-4 flex items-center justify-center text-center text-sm font-semibold shadow-md">
+              Disusun secara berurutan logis dari awal hingga selesai.
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="card-flip h-40 cursor-pointer" onclick="flipCard(this)">
+          <div class="card-flip-inner w-full h-full relative">
+            <div class="card-front absolute inset-0 bg-emerald-100 border-2 border-emerald-300 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
+              <i class="fa-solid fa-flag-checkered text-3xl text-emerald-600 mb-2"></i>
+              <h4 class="font-bold text-emerald-900 text-lg">Tujuan Jelas</h4>
+              <p class="text-xs text-emerald-700 mt-1">Sentuh untuk penjelasan</p>
+            </div>
+            <div class="card-back absolute inset-0 bg-emerald-600 text-white rounded-2xl p-4 flex items-center justify-center text-center text-sm font-semibold shadow-md">
+              Memiliki target hasil akhir kegiatan yang spesifik.
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="card-flip h-40 cursor-pointer" onclick="flipCard(this)">
+          <div class="card-flip-inner w-full h-full relative">
+            <div class="card-front absolute inset-0 bg-amber-100 border-2 border-amber-300 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
+              <i class="fa-solid fa-terminal text-3xl text-amber-600 mb-2"></i>
+              <h4 class="font-bold text-amber-900 text-lg">Kalimat Perintah</h4>
+              <p class="text-xs text-amber-700 mt-1">Sentuh untuk penjelasan</p>
+            </div>
+            <div class="card-back absolute inset-0 bg-amber-600 text-white rounded-2xl p-4 flex items-center justify-center text-center text-sm font-semibold shadow-md">
+              Menggunakan instruksi imperatif seperti "tuangkan", "aduklah".
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="card-flip h-40 cursor-pointer" onclick="flipCard(this)">
+          <div class="card-flip-inner w-full h-full relative">
+            <div class="card-front absolute inset-0 bg-purple-100 border-2 border-purple-300 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
+              <i class="fa-solid fa-person-running text-3xl text-purple-600 mb-2"></i>
+              <h4 class="font-bold text-purple-900 text-lg">Kata Kerja Tindakan</h4>
+              <p class="text-xs text-purple-700 mt-1">Sentuh untuk penjelasan</p>
+            </div>
+            <div class="card-back absolute inset-0 bg-purple-600 text-white rounded-2xl p-4 flex items-center justify-center text-center text-sm font-semibold shadow-md">
+              Fokus pada tindakan fisik aktif: memotong, memasukkan, mengiris.
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="card-flip h-40 cursor-pointer" onclick="flipCard(this)">
+          <div class="card-flip-inner w-full h-full relative">
+            <div class="card-front absolute inset-0 bg-rose-100 border-2 border-rose-300 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
+              <i class="fa-solid fa-arrow-down-1-9 text-3xl text-rose-600 mb-2"></i>
+              <h4 class="font-bold text-rose-900 text-lg">Penanda Urutan</h4>
+              <p class="text-xs text-rose-700 mt-1">Sentuh untuk penjelasan</p>
+            </div>
+            <div class="card-back absolute inset-0 bg-rose-600 text-white rounded-2xl p-4 flex items-center justify-center text-center text-sm font-semibold shadow-md">
+              Menggunakan kata hubung: pertama, kemudian, selanjutnya, terakhir.
+            </div>
+          </div>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="card-flip h-40 cursor-pointer" onclick="flipCard(this)">
+          <div class="card-flip-inner w-full h-full relative">
+            <div class="card-front absolute inset-0 bg-teal-100 border-2 border-teal-300 rounded-2xl p-4 flex flex-col items-center justify-center text-center shadow-sm">
+              <i class="fa-solid fa-toolbox text-3xl text-teal-600 mb-2"></i>
+              <h4 class="font-bold text-teal-900 text-lg">Alat & Bahan</h4>
+              <p class="text-xs text-teal-700 mt-1">Sentuh untuk penjelasan</p>
+            </div>
+            <div class="card-back absolute inset-0 bg-teal-600 text-white rounded-2xl p-4 flex items-center justify-center text-center text-sm font-semibold shadow-md">
+              Mencantumkan perlengkapan serta takaran jika diperlukan.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 5: STRUKTUR TEKS PROSEDUR -->
+    <div id="page-5" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-amber-200 space-y-6">
+      <div class="border-b-2 border-amber-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-amber-900 flex items-center gap-3">
+          <span class="bg-amber-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-lg">4</span>
+          Struktur Teks Prosedur
+        </h2>
+        <span class="text-sm font-semibold text-amber-600 bg-amber-50 px-3 py-1 rounded-full">Diagram Interaktif</span>
+      </div>
+
+      <div class="space-y-3">
+        <div class="touch-btn bg-gradient-to-r from-sky-500 to-sky-600 text-white p-4 rounded-2xl shadow-sm flex items-center gap-4 cursor-pointer" onclick="alert('Judul & Tujuan: Menjelaskan nama kegiatan dan hasil akhir yang ingin dicapai.')">
+          <div class="bg-white/20 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-black">1</div>
+          <div class="flex-1">
+            <h3 class="font-bold text-xl">Judul atau Tujuan</h3>
+            <p class="text-sky-100 text-sm">Menjelaskan kegiatan yang akan dilakukan atau dibuat.</p>
+          </div>
+          <i class="fa-solid fa-chevron-right text-sky-200"></i>
+        </div>
+
+        <div class="touch-btn bg-gradient-to-r from-teal-500 to-teal-600 text-white p-4 rounded-2xl shadow-sm flex items-center gap-4 cursor-pointer" onclick="alert('Alat & Bahan: Daftar benda dan takaran yang dibutuhkan (opsional pada prosedur melakukan tindakan).')">
+          <div class="bg-white/20 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-black">2</div>
+          <div class="flex-1">
+            <h3 class="font-bold text-xl">Alat dan Bahan</h3>
+            <p class="text-teal-100 text-sm">Mencantumkan kebutuhan peralatan serta jumlah/takaran.</p>
+          </div>
+          <i class="fa-solid fa-chevron-right text-teal-200"></i>
+        </div>
+
+        <div class="touch-btn bg-gradient-to-r from-amber-500 to-amber-600 text-white p-4 rounded-2xl shadow-sm flex items-center gap-4 cursor-pointer" onclick="alert('Langkah-langkah: Inti dari teks prosedur berupa tahapan rinci berurutan.')">
+          <div class="bg-white/20 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-black">3</div>
+          <div class="flex-1">
+            <h3 class="font-bold text-xl">Langkah-Langkah (Inti)</h3>
+            <p class="text-amber-100 text-sm">Menjelaskan tahapan kegiatan secara runtut dari awal hingga akhir.</p>
+          </div>
+          <i class="fa-solid fa-chevron-right text-amber-200"></i>
+        </div>
+
+        <div class="touch-btn bg-gradient-to-r from-emerald-500 to-emerald-600 text-white p-4 rounded-2xl shadow-sm flex items-center gap-4 cursor-pointer" onclick="alert('Penutup: Berisi ungkapan apresiasi, simpulan, atau ucapan selamat.')">
+          <div class="bg-white/20 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl font-black">4</div>
+          <div class="flex-1">
+            <h3 class="font-bold text-xl">Penutup / Penegasan</h3>
+            <p class="text-emerald-100 text-sm">Berisi simpulan, ucapan selamat, atau penegasan hasil.</p>
+          </div>
+          <i class="fa-solid fa-chevron-right text-emerald-200"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 6: KAIDAH KEBAHASAAN -->
+    <div id="page-6" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-emerald-200 space-y-6">
+      <div class="border-b-2 border-emerald-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-emerald-900 flex items-center gap-3">
+          <span class="bg-emerald-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-lg">5</span>
+          Kaidah Kebahasaan Teks Prosedur
+        </h2>
+        <span class="text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Fitur Bahasa</span>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4 text-base">
+        <div class="bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl">
+          <h4 class="font-bold text-emerald-800 text-lg mb-1">1. Kalimat Perintah (Imperatif)</h4>
+          <p class="text-slate-600">Instruksi langsung kepada pembaca.</p>
+          <span class="inline-block bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-lg mt-2 text-sm">Contoh: "Masukkan air ke gelas!"</span>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl">
+          <h4 class="font-bold text-emerald-800 text-lg mb-1">2. Kata Kerja Tindakan</h4>
+          <p class="text-slate-600">Verba material yang menyatakan aksi fisik.</p>
+          <span class="inline-block bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-lg mt-2 text-sm">Contoh: Potong, aduk, tuang, susun</span>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl">
+          <h4 class="font-bold text-emerald-800 text-lg mb-1">3. Konjungsi Urutan</h4>
+          <p class="text-slate-600">Kata penghubung antar-langkah.</p>
+          <span class="inline-block bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-lg mt-2 text-sm">Contoh: Pertama, kemudian, selanjutnya</span>
+        </div>
+
+        <div class="bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl">
+          <h4 class="font-bold text-emerald-800 text-lg mb-1">4. Kata Keterangan (Adverbia)</h4>
+          <p class="text-slate-600">Keterangan cara, waktu, atau alat.</p>
+          <span class="inline-block bg-emerald-100 text-emerald-800 font-bold px-3 py-1 rounded-lg mt-2 text-sm">Contoh: Dengan pelan, selama 5 menit</span>
+        </div>
+      </div>
+
+      <!-- Quick Mini Practice -->
+      <div class="bg-amber-50 border-2 border-amber-300 p-4 rounded-2xl space-y-3">
+        <h4 class="font-bold text-amber-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-600"></i> Latihan Mini: Sentuh kata yang merupakan kata kerja tindakan!
+        </h4>
+        <div class="flex flex-wrap gap-3" id="mini-practice-words">
+          <button onclick="checkMiniWord(this, false)" class="touch-btn bg-white border-2 border-slate-300 font-bold px-4 py-2 rounded-xl text-base">Rumah</button>
+          <button onclick="checkMiniWord(this, true)" class="touch-btn bg-white border-2 border-slate-300 font-bold px-4 py-2 rounded-xl text-base">Aduklah</button>
+          <button onclick="checkMiniWord(this, false)" class="touch-btn bg-white border-2 border-slate-300 font-bold px-4 py-2 rounded-xl text-base">Indah</button>
+          <button onclick="checkMiniWord(this, true)" class="touch-btn bg-white border-2 border-slate-300 font-bold px-4 py-2 rounded-xl text-base">Tuangkan</button>
+          <button onclick="checkMiniWord(this, false)" class="touch-btn bg-white border-2 border-slate-300 font-bold px-4 py-2 rounded-xl text-base">Kemudian</button>
+        </div>
+        <p id="mini-practice-feedback" class="text-sm font-bold text-slate-700 h-5"></p>
+      </div>
+    </div>
+
+    <!-- PAGE 7: CONTOH TEKS PROSEDUR -->
+    <div id="page-7" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-purple-200 space-y-6">
+      <div class="border-b-2 border-purple-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-purple-900 flex items-center gap-3">
+          <span class="bg-purple-500 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-lg">6</span>
+          Contoh Teks Prosedur
+        </h2>
+        <button onclick="toggleStructureHighlight()" id="btn-toggle-structure" class="touch-btn bg-purple-600 hover:bg-purple-700 text-white font-bold px-4 py-2 rounded-xl text-sm flex items-center gap-2">
+          <i class="fa-solid fa-eye"></i>
+          <span>Lihat Struktur Teks</span>
+        </button>
+      </div>
+
+      <!-- Text Container with Structure Labels -->
+      <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+        <!-- Title & Goal -->
+        <div id="struct-goal" class="p-3 rounded-xl transition-all border-2 border-transparent">
+          <div class="struct-tag hidden text-xs font-bold text-sky-700 uppercase tracking-wider mb-1">Bagian 1: Judul & Tujuan</div>
+          <h3 class="text-2xl font-black text-slate-800">Cara Membuat Es Teh Manis Segar</h3>
+          <p class="text-slate-600 mt-1 text-base">Es teh manis adalah minuman segar yang sangat populer dan mudah dibuat untuk melepaskan dahaga di hari yang panas.</p>
+        </div>
+
+        <!-- Materials & Tools -->
+        <div id="struct-materials" class="p-3 rounded-xl transition-all border-2 border-transparent">
+          <div class="struct-tag hidden text-xs font-bold text-teal-700 uppercase tracking-wider mb-1">Bagian 2: Alat & Bahan</div>
+          <h4 class="font-bold text-slate-800 text-lg mb-2">Alat dan Bahan:</h4>
+          <ul class="list-disc list-inside text-slate-700 space-y-1 text-base">
+            <li>1 kantong teh celup</li>
+            <li>2 sendok makan gula pasir</li>
+            <li>200 ml air panas & es batu secukupnya</li>
+            <li>Gelas dan sendok pengaduk</li>
+          </ul>
+        </div>
+
+        <!-- Steps -->
+        <div id="struct-steps" class="p-3 rounded-xl transition-all border-2 border-transparent">
+          <div class="struct-tag hidden text-xs font-bold text-amber-700 uppercase tracking-wider mb-1">Bagian 3: Langkah-Langkah</div>
+          <h4 class="font-bold text-slate-800 text-lg mb-2">Langkah-Langkah:</h4>
+          <ol class="list-decimal list-inside text-slate-700 space-y-2 text-base">
+            <li>Seduh teh celup dalam gelas dengan air panas hingga larut dan berwarna kecokelatan.</li>
+            <li>Masukkan 2 sendok makan gula pasir ke dalam gelas.</li>
+            <li>Aduk larutan teh dan gula secara merata menggunakan sendok.</li>
+            <li>Tambahkan es batu secukupnya hingga minuman menjadi dingin segar.</li>
+          </ol>
+        </div>
+
+        <!-- Conclusion -->
+        <div id="struct-closing" class="p-3 rounded-xl transition-all border-2 border-transparent">
+          <div class="struct-tag hidden text-xs font-bold text-emerald-700 uppercase tracking-wider mb-1">Bagian 4: Penutup</div>
+          <p class="text-slate-700 font-medium italic text-base">Es teh manis segar siap dinikmati bersama keluarga atau teman-teman!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 8: PERMAINAN 1 - SUSUN LANGKAH -->
+    <div id="page-8" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-emerald-200 space-y-6">
+      <div class="border-b-2 border-emerald-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-emerald-900 flex items-center gap-3">
+          <i class="fa-solid fa-gamepad text-emerald-500"></i>
+          Permainan 1: Susun Langkah Urut!
+        </h2>
+        <span class="text-sm font-semibold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Sentuh Panah / Seret Untuk Mengurutkan</span>
+      </div>
+
+      <p class="text-slate-700 text-base">Susunlah langkah-langkah acak <strong>"Cara Mencuci Tangan yang Benar"</strong> di bawah ini hingga berurutan!</p>
+
+      <!-- Reorderable List Container -->
+      <div id="sortable-list" class="space-y-3">
+        <!-- Reorder Items injected by JS -->
+      </div>
+
+      <div class="flex flex-wrap gap-4 justify-between items-center pt-2">
+        <button onclick="resetSortGame()" class="touch-btn bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold px-5 py-3 rounded-2xl flex items-center gap-2">
+          <i class="fa-solid fa-rotate-right"></i> Acak Ulang
+        </button>
+        <button onclick="checkSortGame()" class="touch-btn bg-emerald-500 hover:bg-emerald-600 text-white font-extrabold px-8 py-3.5 rounded-2xl shadow-md text-lg flex items-center gap-2">
+          <i class="fa-solid fa-circle-check"></i> Periksa Jawaban
+        </button>
+      </div>
+
+      <div id="sort-feedback" class="hidden p-4 rounded-2xl font-bold text-center text-lg"></div>
+    </div>
+
+    <!-- PAGE 9: PERMAINAN 2 - DETEKTIF BAHASA -->
+    <div id="page-9" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-amber-200 space-y-6">
+      <div class="border-b-2 border-amber-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-amber-900 flex items-center gap-3">
+          <i class="fa-solid fa-magnifying-glass text-amber-500"></i>
+          Permainan 2: Detektif Bahasa
+        </h2>
+        <div class="bg-amber-100 text-amber-900 font-bold px-4 py-1.5 rounded-full text-base flex items-center gap-2">
+          <i class="fa-solid fa-star text-amber-500"></i>
+          <span>Poin Detektif: <span id="detective-score">0</span></span>
+        </div>
+      </div>
+
+      <p class="text-slate-700 text-base">Identifikasi kaidah kebahasaan pada kalimat-kalimat berikut dengan menyentuh tombol yang sesuai!</p>
+
+      <div id="detective-cards-container" class="space-y-4">
+        <!-- Detective Challenge Items rendered by JS -->
+      </div>
+    </div>
+
+    <!-- PAGE 10: KUIS INTERAKTIF -->
+    <div id="page-10" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-sky-200 space-y-6">
+      <div class="border-b-2 border-sky-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-sky-900 flex items-center gap-3">
+          <i class="fa-solid fa-graduation-cap text-sky-500"></i>
+          Kuis Interaktif (10 Soal)
+        </h2>
+        <div class="text-sm font-bold text-sky-700 bg-sky-50 px-4 py-1.5 rounded-full flex items-center gap-2">
+          <span>Soal <span id="quiz-current-num">1</span> dari 10</span>
+        </div>
+      </div>
+
+      <!-- Quiz Body Container -->
+      <div id="quiz-body" class="space-y-6">
+        <div class="bg-sky-50 border-2 border-sky-200 p-5 rounded-2xl">
+          <p id="quiz-question-text" class="text-xl font-bold text-sky-950 leading-relaxed"></p>
+        </div>
+
+        <div id="quiz-options-container" class="grid md:grid-cols-2 gap-4">
+          <!-- Quiz Option Buttons rendered by JS -->
+        </div>
+
+        <div id="quiz-feedback-box" class="hidden p-4 rounded-2xl border-2 font-medium text-base"></div>
+
+        <div class="flex justify-between items-center pt-2">
+          <span class="text-sm text-slate-500 font-semibold">Skor Sementara: <span id="quiz-temp-score">0</span></span>
+          <button id="btn-next-question" onclick="nextQuizQuestion()" class="hidden touch-btn bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-3 rounded-xl text-base flex items-center gap-2">
+            <span>Soal Berikutnya</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quiz Final Score Screen -->
+      <div id="quiz-result-screen" class="hidden text-center space-y-6 py-8">
+        <div class="w-24 h-24 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-5xl mx-auto shadow-inner">
+          <i class="fa-solid fa-trophy"></i>
+        </div>
+        <div>
+          <h3 class="text-3xl font-extrabold text-slate-800">Kuis Selesai!</h3>
+          <p class="text-slate-600 mt-1">Berikut adalah hasil evaluasi pemahaman Teks Prosedur Anda:</p>
+        </div>
+        <div class="inline-block bg-sky-50 border-4 border-sky-300 px-10 py-6 rounded-3xl shadow-sm">
+          <div class="text-6xl font-black text-sky-600" id="quiz-final-score">0</div>
+          <div class="text-sm font-bold text-sky-800 uppercase tracking-widest mt-1">Nilai Akhir</div>
+        </div>
+        <div id="quiz-evaluation-msg" class="text-lg font-bold text-emerald-700"></div>
+        <div>
+          <button onclick="restartQuiz()" class="touch-btn bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold px-8 py-3.5 rounded-2xl shadow-md text-base inline-flex items-center gap-2">
+            <i class="fa-solid fa-rotate-left"></i>
+            <span>Ulangi Kuis</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 11: TANTANGAN KELOMPOK -->
+    <div id="page-11" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-indigo-200 space-y-6">
+      <div class="border-b-2 border-indigo-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-indigo-900 flex items-center gap-3">
+          <i class="fa-solid fa-users text-indigo-500"></i>
+          Tantangan Kelompok: "Jadilah Penulis Teks Prosedur!"
+        </h2>
+        <span class="text-sm font-semibold text-indigo-600 bg-indigo-50 px-3 py-1 rounded-full">Proyek Kolaboratif</span>
+      </div>
+
+      <p class="text-slate-700 text-base">Pilihlah salah satu topik tugas kelompok berikut, lalu tuliskan teks prosedur lengkap di lembar kerja kelompok!</p>
+
+      <!-- Task Topics Grid -->
+      <div class="grid md:grid-cols-2 gap-4">
+        <div onclick="selectGroupTopic(this, 'Cara Merawat Tanaman Hias')" class="group-topic-card touch-btn bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl cursor-pointer hover:border-indigo-400">
+          <div class="text-2xl mb-1">🌱</div>
+          <h4 class="font-bold text-slate-800 text-lg">Topik A: Merawat Tanaman</h4>
+          <p class="text-slate-600 text-xs mt-1">Cara merawat tanaman hias di lingkungan sekolah agar subur.</p>
+        </div>
+
+        <div onclick="selectGroupTopic(this, 'Cara Menjaga Kebersihan Kelas')" class="group-topic-card touch-btn bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl cursor-pointer hover:border-indigo-400">
+          <div class="text-2xl mb-1">🧹</div>
+          <h4 class="font-bold text-slate-800 text-lg">Topik B: Kebersihan Kelas</h4>
+          <p class="text-slate-600 text-xs mt-1">Cara melaksanakan piket kelas dengan efektif dan bersih.</p>
+        </div>
+
+        <div onclick="selectGroupTopic(this, 'Cara Membuat Makanan/Minuman')" class="group-topic-card touch-btn bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl cursor-pointer hover:border-indigo-400">
+          <div class="text-2xl mb-1">🍌</div>
+          <h4 class="font-bold text-slate-800 text-lg">Topik C: Makanan/Minuman Sehat</h4>
+          <p class="text-slate-600 text-xs mt-1">Cara membuat camilan atau jus buah sederhana dan sehat.</p>
+        </div>
+
+        <div onclick="selectGroupTopic(this, 'Cara Menggunakan Peralatan')" class="group-topic-card touch-btn bg-slate-50 border-2 border-slate-200 p-4 rounded-2xl cursor-pointer hover:border-indigo-400">
+          <div class="text-2xl mb-1">💻</div>
+          <h4 class="font-bold text-slate-800 text-lg">Topik D: Keamanan Alat</h4>
+          <p class="text-slate-600 text-xs mt-1">Cara menggunakan laptop/komputer sekolah secara aman.</p>
+        </div>
+      </div>
+
+      <!-- Rubrik Penilaian Singkat -->
+      <div class="bg-indigo-50 border-2 border-indigo-200 p-4 rounded-2xl space-y-2">
+        <h4 class="font-bold text-indigo-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-clipboard-check text-indigo-600"></i> Rubrik Penilaian Karya Teks Prosedur:
+        </h4>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs md:text-sm font-semibold text-slate-700">
+          <div class="bg-white p-2 rounded-xl border border-indigo-100">1. Ketepatan Struktur (Judul, Tujuan, Langkah)</div>
+          <div class="bg-white p-2 rounded-xl border border-indigo-100">2. Keruntutan & Logika Urutan Langkah</div>
+          <div class="bg-white p-2 rounded-xl border border-indigo-100">3. Penggunaan Kalimat Perintah</div>
+          <div class="bg-white p-2 rounded-xl border border-indigo-100">4. Kejelasan Isi & Bahasa</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PAGE 12: REFLEKSI DAN PENUTUP -->
+    <div id="page-12" class="page-content hidden w-full max-w-6xl bg-white rounded-3xl p-6 md:p-8 shadow-xl border-4 border-rose-200 space-y-6">
+      <div class="border-b-2 border-rose-100 pb-3 flex justify-between items-center">
+        <h2 class="text-2xl md:text-3xl font-extrabold text-rose-900 flex items-center gap-3">
+          <i class="fa-solid fa-heart text-rose-500"></i>
+          Refleksi & Penutup Pembelajaran
+        </h2>
+        <span class="text-sm font-semibold text-rose-600 bg-rose-50 px-3 py-1 rounded-full">Evaluasi Diri</span>
+      </div>
+
+      <!-- Reflection Questions -->
+      <div class="grid md:grid-cols-3 gap-4 text-center">
+        <div class="bg-amber-50 border-2 border-amber-200 p-5 rounded-2xl space-y-2">
+          <div class="text-3xl">💡</div>
+          <h4 class="font-bold text-amber-900 text-base">Pengetahuan Baru</h4>
+          <p class="text-slate-600 text-sm">Apa hal paling menarik yang baru kalian pelajari hari ini tentang teks prosedur?</p>
+        </div>
+
+        <div class="bg-emerald-50 border-2 border-emerald-200 p-5 rounded-2xl space-y-2">
+          <div class="text-3xl">🧭</div>
+          <h4 class="font-bold text-emerald-900 text-base">Pentingnya Urutan</h4>
+          <p class="text-slate-600 text-sm">Mengapa urutan langkah sangat penting dalam kehidupan sehari-hari?</p>
+        </div>
+
+        <div class="bg-sky-50 border-2 border-sky-200 p-5 rounded-2xl space-y-2">
+          <div class="text-3xl">⭐</div>
+          <h4 class="font-bold text-sky-900 text-base">Tantangan Belajar</h4>
+          <p class="text-slate-600 text-sm">Bagian mana yang paling mudah dan paling menantang dalam pembelajaran tadi?</p>
+        </div>
+      </div>
+
+      <!-- Completion Banner -->
+      <div class="bg-gradient-to-r from-amber-400 via-rose-400 to-pink-500 text-white p-6 rounded-3xl text-center space-y-3 shadow-md">
+        <h3 class="text-2xl md:text-3xl font-black">👏 Selamat! Kalian Luar Biasa!</h3>
+        <p class="text-rose-50 text-base max-w-2xl mx-auto">
+          Kalian telah menyelesaikan petualangan pembelajaran Teks Prosedur. Teruslah berlatih menulis dan membaca petunjuk dengan teliti!
+        </p>
+        <button onclick="triggerAppreciationConfetti(); goToPage(1);" class="touch-btn bg-white text-rose-600 font-extrabold px-8 py-3.5 rounded-2xl shadow-md hover:bg-rose-50 text-base inline-flex items-center gap-2 mt-2">
+          <i class="fa-solid fa-flag-checkered"></i>
+          <span>Selesai Belajar & Kembali ke Beranda</span>
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Bottom Global Navigation Bar -->
+  <footer class="bg-white border-t border-slate-200 px-6 py-3 flex justify-between items-center z-20 shadow-lg">
+    <button id="btn-prev" onclick="prevPage()" class="touch-btn bg-slate-200 hover:bg-slate-300 text-slate-800 font-extrabold px-5 py-3 rounded-2xl flex items-center gap-2 text-base">
+      <i class="fa-solid fa-arrow-left"></i>
+      <span>Kembali</span>
+    </button>
+
+    <!-- Page Indicators -->
+    <div class="flex items-center gap-2">
+      <span class="text-sm font-extrabold text-slate-700 bg-slate-100 px-4 py-2 rounded-2xl border border-slate-200">
+        Halaman <span id="current-page-num" class="text-sky-600">1</span> / 12
+      </span>
+    </div>
+
+    <button id="btn-next" onclick="nextPage()" class="touch-btn bg-sky-500 hover:bg-sky-600 text-white font-extrabold px-6 py-3 rounded-2xl flex items-center gap-2 text-base shadow-md">
+      <span>Lanjut</span>
+      <i class="fa-solid fa-arrow-right"></i>
+    </button>
+  </footer>
+
+  <!-- Help Modal -->
+  <div id="help-modal" class="hidden fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex justify-center items-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 space-y-4 shadow-2xl border-4 border-amber-300 animate-fade-in">
+      <div class="flex justify-between items-center border-b pb-2">
+        <h3 class="text-xl font-extrabold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-circle-question text-amber-500"></i>
+          Petunjuk Penggunaan Media
+        </h3>
+        <button onclick="toggleHelpModal()" class="text-slate-400 hover:text-slate-600 text-2xl font-bold">&times;</button>
+      </div>
+      <ul class="space-y-2 text-sm text-slate-700 list-disc list-inside">
+        <li>Gunakan tombol <strong>Lanjut</strong> dan <strong>Kembali</strong> di bagian bawah layar untuk berpindah halaman.</li>
+        <li>Sentuh kartu materi interaktif pada Halaman 4 dan 5 untuk membuka penjelasan.</li>
+        <li>Pada Permainan 1 (Halaman 8), gunakan tombol panah naik/turun untuk menyusun urutan langkah secara tepat.</li>
+        <li>Pada Permainan 2 (Halaman 9) & Kuis (Halaman 10), sentuh opsi jawaban langsung pada layar papan digital.</li>
+        <li>Skor kuis akan terhitung secara otomatis di akhir kuis.</li>
+      </ul>
+      <div class="pt-2 text-center">
+        <button onclick="toggleHelpModal()" class="touch-btn bg-sky-500 text-white font-bold px-6 py-2.5 rounded-xl">
+          Paham, Tutup Petunjuk
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Application State
+    let currentPage = 1;
+    const totalPages = 12;
+
+    // Game 1 Sort Data
+    const defaultSortItems = [
+      { id: 1, text: "Basahi tangan dengan air bersih mengalir." },
+      { id: 2, text: "Tuangkan sabun secukupnya pada telapak tangan." },
+      { id: 3, text: "Gosok telapak, punggung tangan, dan sela-sela jari." },
+      { id: 4, text: "Bilas tangan dengan air bersih mengalir hingga busa hilang." },
+      { id: 5, text: "Keringkan tangan menggunakan lap atau tisu bersih." }
+    ];
+    let currentSortItems = [];
+
+    // Game 2 Detective Data
+    const detectiveQuestions = [
+      {
+        id: 1,
+        sentence: "<strong>Aduklah</strong> adonan tersebut hingga tercampur rata!",
+        targetWord: "Aduklah",
+        options: ["Kalimat Perintah / Verba Imperatif", "Kata Penghubung Urutan", "Kata Benda"],
+        correctIndex: 0,
+        explanation: "Kata 'Aduklah' merupakan kata kerja perintah (imperatif) yang memberikan instruksi langsung."
+      },
+      {
+        id: 2,
+        sentence: "<strong>Kemudian</strong>, tuangkan air panas ke dalam gelas secara perlahan.",
+        targetWord: "Kemudian",
+        options: ["Kata Kerja Tindakan", "Konjungsi / Penanda Urutan", "Keterangan Tempat"],
+        correctIndex: 1,
+        explanation: "Kata 'Kemudian' bertindak sebagai konjungsi urutan yang menghubungkan satu tahap ke tahap berikutnya."
+      },
+      {
+        id: 3,
+        sentence: "Guntinglah kertas karton mengikuti garis putus-putus <strong>selama 2 menit</strong>.",
+        targetWord: "selama 2 menit",
+        options: ["Keterangan Alat", "Keterangan Cara", "Keterangan Waktu"],
+        correctIndex: 2,
+        explanation: "Frasa 'selama 2 menit' memberikan rincian waktu durasi pelaksanaan."
+      }
+    ];
+    let detectiveScore = 0;
+
+    // Page 10 Quiz Data (10 Questions)
+    const quizQuestions = [
+      {
+        q: "Apa pengertian utama dari teks prosedur?",
+        options: [
+          "Teks yang berisi pendapat pribadi tentang suatu peristiwa",
+          "Teks yang berisi tujuan dan langkah-langkah sistematis untuk melakukan/membuat sesuatu",
+          "Teks yang menceritakan pengalaman lucu di masa lalu",
+          "Teks yang menggambarkan keindahan alam secara detail"
+        ],
+        ans: 1,
+        exp: "Teks prosedur bertujuan memberikan panduan langkah-langkah secara sistematis agar suatu kegiatan berhasil dilakukan."
+      },
+      {
+        q: "Manakah yang merupakan tujuan utama penulisan teks prosedur?",
+        options: [
+          "Menghibur pembaca dengan cerita imajinatif",
+          "Mempengaruhi pembaca agar membeli suatu produk",
+          "Memberikan petunjuk petunjuk agar pembaca dapat melakukan kegiatan dengan benar",
+          "Menyampaikan berita terbaru kepada masyarakat"
+        ],
+        ans: 2,
+        exp: "Tujuan utama teks prosedur adalah memandu pembaca mencapai hasil yang benar dan aman."
+      },
+      {
+        q: "Ciri bahasa yang paling menonjol dalam teks prosedur adalah penggunaan...",
+        options: [
+          "Kalimat perintah (imperatif) dan kata kerja tindakan",
+          "Kalimat tanya dan kata sifat kiasan",
+          "Majas metafora dan puisi",
+          "Dialog antar-tokoh secara panjang"
+        ],
+        ans: 0,
+        exp: "Teks prosedur menggunakan instruksi langsung (kalimat perintah) serta kata kerja tindakan aktif."
+      },
+      {
+        q: "Bagian struktur teks prosedur yang berisi daftar kebutuhan perlengkapan disebut...",
+        options: ["Tujuan", "Langkah-langkah", "Alat dan Bahan", "Penutup"],
+        ans: 2,
+        exp: "Bagian Alat dan Bahan merinci peralatan serta bahan dan ukuran yang diperlukan."
+      },
+      {
+        q: "Urutan struktur teks prosedur yang benar dan teratur adalah...",
+        options: [
+          "Langkah-Langkah -> Alat/Bahan -> Judul/Tujuan -> Penutup",
+          "Judul/Tujuan -> Alat/Bahan -> Langkah-Langkah -> Penutup",
+          "Penutup -> Langkah-Langkah -> Judul/Tujuan -> Alat/Bahan",
+          "Alat/Bahan -> Penutup -> Judul/Tujuan -> Langkah-Langkah"
+        ],
+        ans: 1,
+        exp: "Struktur standar diawali Judul/Tujuan, Alat/Bahan (jika ada), Langkah-langkah, dan diakhiri Penutup."
+      },
+      {
+        q: "Manakah contoh kalimat perintah (imperatif) di bawah ini?",
+        options: [
+          "Saya sangat menyukai jus mangga dingin.",
+          "Apakah es teh manis ini terasa manis?",
+          "Masukkan dua sendok gula pasir ke dalam gelas!",
+          "Ibu sedang membeli teh di warung."
+        ],
+        ans: 2,
+        exp: "Kalimat 'Masukkan dua sendok gula pasir ke dalam gelas!' merupakan instruksi perintah langsung."
+      },
+      {
+        q: "Kata-kata seperti 'pertama', 'kemudian', 'selanjutnya', dan 'terakhir' berfungsi sebagai...",
+        options: ["Kata benda", "Penanda urutan (konjungsi)", "Kata sifat", "Kata ganti orang"],
+        ans: 1,
+        exp: "Kata-kata tersebut memandu urutan kronologis antar-langkah."
+      },
+      {
+        q: "Apa akibat jika langkah-langkah dalam teks prosedur dilakukan secara acak?",
+        options: [
+          "Prosedur menjadi lebih cepat selesai",
+          "Hasil kegiatan bisa gagal atau tidak sesuai tujuan",
+          "Teks menjadi lebih mudah dipahami",
+          "Tidak ada pengaruh sama sekali"
+        ],
+        ans: 1,
+        exp: "Langkah yang teracak dapat merusak proses dan menyebabkan kegagalan atau bahaya."
+      },
+      {
+        q: "Manakah judul di bawah ini yang sesuai untuk Teks Prosedur?",
+        options: [
+          "Keindahan Pemandangan Gunung Bromo",
+          "Pengalamanku Berlibur ke Rumah Nenek",
+          "Cara Membuat Kerajinan Tempat Pensil dari Botol Bekas",
+          "Legenda Candi Prambanan"
+        ],
+        ans: 2,
+        exp: "Judul 'Cara Membuat...' secara jelas menandakan petunjuk prosedur tindakan."
+      },
+      {
+        q: "Frasa 'selama 5 menit' dalam kalimat 'Rebuslah air selama 5 menit' merupakan keterangan...",
+        options: ["Keterangan Alat", "Keterangan Waktu", "Keterangan Tempat", "Keterangan Cara"],
+        ans: 1,
+        exp: "Durasi waktu seperti 'selama 5 menit' termasuk kategori keterangan waktu."
+      }
+    ];
+
+    let currentQuizIndex = 0;
+    let quizScore = 0;
+    let quizAnswered = false;
+
+    // Navigation Logic
+    function updatePageNavigation() {
+      document.querySelectorAll('.page-content').forEach((p, idx) => {
+        if (idx + 1 === currentPage) {
+          p.classList.remove('hidden');
+        } else {
+          p.classList.add('hidden');
+        }
+      });
+
+      document.getElementById('current-page-num').innerText = currentPage;
+
+      // Button States
+      const btnPrev = document.getElementById('btn-prev');
+      const btnNext = document.getElementById('btn-next');
+
+      if (currentPage === 1) {
+        btnPrev.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        btnPrev.classList.remove('opacity-50', 'pointer-events-none');
+      }
+
+      if (currentPage === totalPages) {
+        btnNext.classList.add('opacity-50', 'pointer-events-none');
+      } else {
+        btnNext.classList.remove('opacity-50', 'pointer-events-none');
+      }
+    }
+
+    function goToPage(page) {
+      if (page >= 1 && page <= totalPages) {
+        currentPage = page;
+        updatePageNavigation();
+      }
+    }
+
+    function nextPage() {
+      if (currentPage < totalPages) {
+        currentPage++;
+        updatePageNavigation();
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        updatePageNavigation();
+      }
+    }
+
+    function toggleHelpModal() {
+      const modal = document.getElementById('help-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    function resetAllProgress() {
+      if (confirm('Apakah Anda yakin ingin mengulang seluruh progress materi, permainan, dan kuis?')) {
+        currentPage = 1;
+        detectiveScore = 0;
+        document.getElementById('detective-score').innerText = '0';
+        resetSortGame();
+        initDetectiveGame();
+        restartQuiz();
+        updatePageNavigation();
+      }
+    }
+
+    // Page 2 Discussion Answer
+    function toggleDiscussionAnswer() {
+      const el = document.getElementById('apersepsi-discussion');
+      el.classList.toggle('hidden');
+    }
+
+    // Page 4 Card Flip
+    function flipCard(cardEl) {
+      cardEl.classList.toggle('flipped');
+    }
+
+    // Page 6 Mini Practice
+    function checkMiniWord(btn, isCorrect) {
+      const feedback = document.getElementById('mini-practice-feedback');
+      if (isCorrect) {
+        btn.classList.remove('bg-white', 'border-slate-300');
+        btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+        feedback.innerText = "✨ Benar! Kata tersebut merupakan kata kerja tindakan aktif.";
+        feedback.className = "text-sm font-bold text-emerald-600 h-5";
+      } else {
+        btn.classList.remove('bg-white', 'border-slate-300');
+        btn.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
+        feedback.innerText = "❌ Kurang tepat. Coba pilih kata kerja yang menyatakan aksi fisik!";
+        feedback.className = "text-sm font-bold text-rose-600 h-5";
+      }
+    }
+
+    // Page 7 Structure Toggle
+    let isStructureVisible = false;
+    function toggleStructureHighlight() {
+      isStructureVisible = !isStructureVisible;
+      const btn = document.getElementById('btn-toggle-structure');
+      const tags = document.querySelectorAll('.struct-tag');
+
+      const g = document.getElementById('struct-goal');
+      const m = document.getElementById('struct-materials');
+      const s = document.getElementById('struct-steps');
+      const c = document.getElementById('struct-closing');
+
+      if (isStructureVisible) {
+        btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> <span>Sembunyikan Struktur</span>';
+        tags.forEach(t => t.classList.remove('hidden'));
+
+        g.classList.add('bg-sky-50', 'border-sky-300');
+        m.classList.add('bg-teal-50', 'border-teal-300');
+        s.classList.add('bg-amber-50', 'border-amber-300');
+        c.classList.add('bg-emerald-50', 'border-emerald-300');
+      } else {
+        btn.innerHTML = '<i class="fa-solid fa-eye"></i> <span>Lihat Struktur Teks</span>';
+        tags.forEach(t => t.classList.add('hidden'));
+
+        g.classList.remove('bg-sky-50', 'border-sky-300');
+        m.classList.remove('bg-teal-50', 'border-teal-300');
+        s.classList.remove('bg-amber-50', 'border-amber-300');
+        c.classList.remove('bg-emerald-50', 'border-emerald-300');
+      }
+    }
+
+    // Page 8 Game 1: Sort Game
+    function initSortGame() {
+      // Shuffle default items
+      currentSortItems = [...defaultSortItems].sort(() => Math.random() - 0.5);
+      renderSortList();
+      const fb = document.getElementById('sort-feedback');
+      fb.classList.add('hidden');
+    }
+
+    function renderSortList() {
+      const container = document.getElementById('sortable-list');
+      container.innerHTML = '';
+
+      currentSortItems.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = "bg-slate-50 border-2 border-slate-300 p-4 rounded-2xl flex items-center justify-between gap-4 shadow-sm";
+        div.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="w-8 h-8 bg-emerald-100 text-emerald-800 rounded-xl font-bold flex items-center justify-center text-sm">${index + 1}</span>
+            <span class="text-base font-semibold text-slate-800">${item.text}</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="moveSortItem(${index}, -1)" class="touch-btn bg-slate-200 hover:bg-slate-300 w-10 h-10 rounded-xl font-bold text-slate-700 flex items-center justify-center ${index === 0 ? 'opacity-30 pointer-events-none' : ''}">
+              <i class="fa-solid fa-arrow-up"></i>
+            </button>
+            <button onclick="moveSortItem(${index}, 1)" class="touch-btn bg-slate-200 hover:bg-slate-300 w-10 h-10 rounded-xl font-bold text-slate-700 flex items-center justify-center ${index === currentSortItems.length - 1 ? 'opacity-30 pointer-events-none' : ''}">
+              <i class="fa-solid fa-arrow-down"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function moveSortItem(index, direction) {
+      const newIndex = index + direction;
+      if (newIndex >= 0 && newIndex < currentSortItems.length) {
+        const temp = currentSortItems[index];
+        currentSortItems[index] = currentSortItems[newIndex];
+        currentSortItems[newIndex] = temp;
+        renderSortList();
+      }
+    }
+
+    function checkSortGame() {
+      let isCorrect = true;
+      currentSortItems.forEach((item, index) => {
+        if (item.id !== index + 1) {
+          isCorrect = false;
+        }
+      });
+
+      const fb = document.getElementById('sort-feedback');
+      fb.classList.remove('hidden');
+
+      if (isCorrect) {
+        fb.className = "p-4 rounded-2xl font-bold text-center text-lg bg-emerald-100 border-2 border-emerald-400 text-emerald-900";
+        fb.innerHTML = "🎉 Luar Biasa! Semua urutan langkah mencuci tangan sudah BENAR dan logis!";
+        triggerAppreciationConfetti();
+      } else {
+        fb.className = "p-4 rounded-2xl font-bold text-center text-lg bg-rose-100 border-2 border-rose-400 text-rose-900";
+        fb.innerHTML = "❌ Urutan belum tepat. Gunakan tombol panah atas/bawah untuk menyesuaikan urutan kembali!";
+      }
+    }
+
+    function resetSortGame() {
+      initSortGame();
+    }
+
+    // Page 9 Game 2: Detective Game
+    function initDetectiveGame() {
+      const container = document.getElementById('detective-cards-container');
+      container.innerHTML = '';
+
+      detectiveQuestions.forEach((q, qIndex) => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 border-2 border-slate-200 p-5 rounded-2xl space-y-3";
+        
+        let optionsHTML = '';
+        q.options.forEach((opt, optIndex) => {
+          optionsHTML += `
+            <button onclick="checkDetectiveAnswer(this, ${qIndex}, ${optIndex})" class="detective-opt-${qIndex} touch-btn bg-white border-2 border-slate-300 hover:border-amber-400 p-3 rounded-xl font-bold text-slate-800 text-left text-sm md:text-base">
+              ${opt}
+            </button>
+          `;
+        });
+
+        card.innerHTML = `
+          <p class="text-lg text-slate-800 font-medium">${q.sentence}</p>
+          <div class="grid md:grid-cols-3 gap-3">
+            ${optionsHTML}
+          </div>
+          <div id="detective-fb-${qIndex}" class="hidden p-3 rounded-xl font-semibold text-sm"></div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function checkDetectiveAnswer(btn, qIndex, selectedOptIndex) {
+      const q = detectiveQuestions[qIndex];
+      const fb = document.getElementById(`detective-fb-${qIndex}`);
+      const optionsButtons = document.querySelectorAll(`.detective-opt-${qIndex}`);
+
+      // Disable buttons for this question
+      optionsButtons.forEach(b => b.classList.add('pointer-events-none', 'opacity-70'));
+
+      fb.classList.remove('hidden');
+
+      if (selectedOptIndex === q.correctIndex) {
+        btn.classList.remove('bg-white', 'border-slate-300');
+        btn.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+        fb.className = "p-3 rounded-xl font-semibold text-sm bg-emerald-100 text-emerald-900 border border-emerald-300";
+        fb.innerHTML = `✅ <strong>Jawaban Tepat!</strong> ${q.explanation}`;
+        detectiveScore += 10;
+        document.getElementById('detective-score').innerText = detectiveScore;
+      } else {
+        btn.classList.remove('bg-white', 'border-slate-300');
+        btn.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
+        fb.className = "p-3 rounded-xl font-semibold text-sm bg-rose-100 text-rose-900 border border-rose-300";
+        fb.innerHTML = `❌ <strong>Kurang Tepat.</strong> ${q.explanation}`;
+      }
+    }
+
+    // Page 10: Quiz System
+    function loadQuizQuestion() {
+      quizAnswered = false;
+      const q = quizQuestions[currentQuizIndex];
+
+      document.getElementById('quiz-current-num').innerText = currentQuizIndex + 1;
+      document.getElementById('quiz-question-text').innerText = q.q;
+
+      const optionsContainer = document.getElementById('quiz-options-container');
+      optionsContainer.innerHTML = '';
+
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      feedbackBox.classList.add('hidden');
+
+      document.getElementById('btn-next-question').classList.add('hidden');
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement('button');
+        btn.className = "quiz-opt-btn touch-btn bg-white border-3 border-sky-200 hover:border-sky-400 p-4 rounded-2xl text-left font-bold text-slate-800 text-base md:text-lg shadow-sm flex items-start gap-3";
+        btn.onclick = () => selectQuizOption(idx, btn);
+        btn.innerHTML = `
+          <span class="w-8 h-8 bg-sky-100 text-sky-800 rounded-xl flex items-center justify-center font-black shrink-0 text-sm">${String.fromCharCode(65 + idx)}</span>
+          <span class="pt-0.5">${opt}</span>
+        `;
+        optionsContainer.appendChild(btn);
+      });
+    }
+
+    function selectQuizOption(idx, btnEl) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+
+      const q = quizQuestions[currentQuizIndex];
+      const allOptBtns = document.querySelectorAll('.quiz-opt-btn');
+      allOptBtns.forEach(b => b.classList.add('pointer-events-none'));
+
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      feedbackBox.classList.remove('hidden');
+
+      if (idx === q.ans) {
+        btnEl.classList.remove('bg-white', 'border-sky-200');
+        btnEl.classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+        feedbackBox.className = "p-4 rounded-2xl border-2 font-medium text-base bg-emerald-100 border-emerald-300 text-emerald-950";
+        feedbackBox.innerHTML = `✅ <strong>Jawaban Benar!</strong> ${q.exp}`;
+        quizScore += 10;
+        document.getElementById('quiz-temp-score').innerText = quizScore;
+      } else {
+        btnEl.classList.remove('bg-white', 'border-sky-200');
+        btnEl.classList.add('bg-rose-500', 'text-white', 'border-rose-600');
+        
+        // Highlight correct answer
+        allOptBtns[q.ans].classList.remove('bg-white', 'border-sky-200');
+        allOptBtns[q.ans].classList.add('bg-emerald-500', 'text-white', 'border-emerald-600');
+
+        feedbackBox.className = "p-4 rounded-2xl border-2 font-medium text-base bg-rose-100 border-rose-300 text-rose-950";
+        feedbackBox.innerHTML = `❌ <strong>Jawaban Salah.</strong> ${q.exp}`;
+      }
+
+      document.getElementById('btn-next-question').classList.remove('hidden');
+    }
+
+    function nextQuizQuestion() {
+      currentQuizIndex++;
+      if (currentQuizIndex < quizQuestions.length) {
+        loadQuizQuestion();
+      } else {
+        showQuizResults();
+      }
+    }
+
+    function showQuizResults() {
+      document.getElementById('quiz-body').classList.add('hidden');
+      const resultScreen = document.getElementById('quiz-result-screen');
+      resultScreen.classList.remove('hidden');
+
+      document.getElementById('quiz-final-score').innerText = quizScore;
+
+      const msgEl = document.getElementById('quiz-evaluation-msg');
+      if (quizScore >= 80) {
+        msgEl.innerText = "🌟 Luar Biasa! Pemahaman kamu tentang Teks Prosedur Sangat Baik!";
+        triggerAppreciationConfetti();
+      } else if (quizScore >= 60) {
+        msgEl.innerText = "👍 Bagus! Kamu sudah memahami konsep dasar teks prosedur dengan baik.";
+      } else {
+        msgEl.innerText = "💪 Tetap semangat! Pelajari kembali materi ciri dan struktur teks prosedur.";
+      }
+    }
+
+    function restartQuiz() {
+      currentQuizIndex = 0;
+      quizScore = 0;
+      document.getElementById('quiz-temp-score').innerText = '0';
+      document.getElementById('quiz-body').classList.remove('hidden');
+      document.getElementById('quiz-result-screen').classList.add('hidden');
+      loadQuizQuestion();
+    }
+
+    // Page 11 Group Topic Selection
+    function selectGroupTopic(cardEl, topicTitle) {
+      document.querySelectorAll('.group-topic-card').forEach(c => {
+        c.classList.remove('border-indigo-600', 'bg-indigo-50', 'ring-2', 'ring-indigo-300');
+      });
+      cardEl.classList.add('border-indigo-600', 'bg-indigo-50', 'ring-2', 'ring-indigo-300');
+      alert(`Topik Terpilih: "${topicTitle}". Silakan diskusikan dan susun teks prosedurnya bersama kelompok!`);
+    }
+
+    // Reward Animation Helper
+    function triggerAppreciationConfetti() {
+      if (typeof confetti === 'function') {
+        confetti({
+          particleCount: 80,
+          spread: 70,
+          origin: { y: 0.6 }
+        });
+      }
+    }
+
+    // Initialize on page load
+    window.onload = function() {
+      updatePageNavigation();
+      initSortGame();
+      initDetectiveGame();
+      loadQuizQuestion();
+    };
+  </script>
+</body>
+</html>
+```
+
+### Rangkuman Fitur & Penggunaan pada Papan Interaktif Digital:
+1. **Navigasi Layar Sentuh**: Tombol *Lanjut*, *Kembali*, dan *Reset* didesain berukuran besar dengan respon aktif sentuhan yang nyaman di operasikan siswa maupun guru.
+2. **Permainan Interaktif**:
+   * **Game 1 (Susun Langkah)**: Mengurutkan 5 tahapan mencuci tangan menggunakan tombol arah interaktif dengan indikator warna hijau (benar) / merah (salah).
+   * **Game 2 (Detektif Bahasa)**: Menemukan kaidah kebahasaan dengan akumulasi poin langsung.
+   * **Kuis 10 Soal**: Pilihan ganda berpenilaian otomatis dengan umpan balik edukatif secara *real-time*.
+3. **Standar Luar Jaringan (Offline)**: Tidak memerlukan server eksternal, cukup buka file `index.html` ini melalui browser internet pada Papan Interaktif Digital.
